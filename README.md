@@ -6,29 +6,7 @@
 
 ## Overview
 
-check-plugin-template is a template repository which wraps the [Sensu Plugin SDK][2].
-To use this project as a template, click the "Use this template" button from the main project page.
-Once the repository is created from this template, you can use the [Sensu Plugin Tool][9] to
-populate the templated fields with the proper values.
-
-## Functionality
-
-After successfully creating a project from this template, update the `Config` struct with any
-configuration options for the plugin, map those values as plugin options in the variable `options`,
-and customize the `checkArgs` and `executeCheck` functions in [main.go][7].
-
-When writing or updating a plugin's README from this template, review the Sensu Community
-[plugin README style guide][3] for content suggestions and guidance. Remove everything
-prior to `# sensu-websocket-check` from the generated README file, and add additional context about the
-plugin per the style guide.
-
-## Releases with Github Actions
-
-To release a version of your project, simply tag the target sha with a semver release without a `v`
-prefix (ex. `1.0.0`). This will trigger the [GitHub action][5] workflow to [build and release][4]
-the plugin with goreleaser. Register the asset with [Bonsai][8] to share it with the community!
-
-***
+This is a basic websocket check, you can specify an payload and reponse string to check for.
 
 # sensu-websocket-check
 
@@ -46,11 +24,36 @@ the plugin with goreleaser. Register the asset with [Bonsai][8] to share it with
 
 ## Overview
 
-The sensu-websocket-check is a [Sensu Check][6] that ...
+The sensu-websocket-check is a [Sensu Check][6] that is used to check a WebSocket server. you can specify a string to check for in the response, and a payload to send to the server.  The plugin will exit with a 0 if the string is found in the response, and a 2 if it is not found.
 
 ## Files
 
+- bin/
+  - sensu-websocket-check - The main executable for the plugin
+
 ## Usage examples
+
+```bash
+./sensu-websocket-check 
+Usage:
+  sensu-go-websocket-check [flags]
+  sensu-go-websocket-check [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  version     Print the version number of this plugin
+
+Flags:
+  -h, --help                     help for sensu-go-websocket-check
+  -i, --ignore-cert              Ignore certificate errors
+  -p, --payload string           Payload to send to the WebSocket server (default "ping")
+  -s, --string-to-check string   String to check in the response (default "ping")
+  -t, --timeout int              Timeout in seconds (default 10)
+  -u, --url string               URL of the WebSocket server to check (e.g., ws://example.com/socket))
+
+Use "sensu-go-websocket-check [command] --help" for more information about a command.
+```
 
 ## Configuration
 
@@ -76,7 +79,7 @@ metadata:
   name: sensu-websocket-check
   namespace: default
 spec:
-  command: sensu-websocket-check --example example_arg
+  command: sensu-websocket-check -u ws://localhost:8080/echo -s ping -p pings
   subscriptions:
   - system
   runtime_assets:
@@ -114,12 +117,5 @@ $ echo $?
 2
 ```
 
-[2]: https://github.com/sensu/sensu-plugin-sdk
-[3]: https://github.com/sensu-plugins/community/blob/master/PLUGIN_STYLEGUIDE.md
-[4]: https://github.com/DoctorOgg/sensu-websocket-check/blob/master/.github/workflows/release.yml
-[5]: https://github.com/DoctorOgg/sensu-websocket-check/actions
 [6]: https://docs.sensu.io/sensu-go/latest/reference/checks/
-[7]: https://github.com/sensu/check-plugin-template/blob/master/main.go
-[8]: https://bonsai.sensu.io/
-[9]: https://github.com/sensu/sensu-plugin-tool
 [10]: https://docs.sensu.io/sensu-go/latest/reference/assets/
