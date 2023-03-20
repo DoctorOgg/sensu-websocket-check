@@ -2,12 +2,6 @@
 ![Go Test](https://github.com/DoctorOgg/sensu-websocket-check/workflows/Go%20Test/badge.svg)
 ![goreleaser](https://github.com/DoctorOgg/sensu-websocket-check/workflows/goreleaser/badge.svg)
 
-# Check Plugin Template
-
-## Overview
-
-This is a basic websocket check, you can specify an payload and reponse string to check for.
-
 # sensu-websocket-check
 
 ## Table of Contents
