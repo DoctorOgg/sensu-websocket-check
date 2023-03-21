@@ -98,9 +98,17 @@ func executeCheck(event *types.Event) (int, error) {
 	if plugin.IgnoreCert {
 		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
-	c, _, err := websocket.DefaultDialer.Dial(plugin.url, http.Header{})
+	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, http.Header{})
+
+	if err == websocket.ErrBadHandshake {
+		fmt.Printf("handshake failed with status %d", resp.StatusCode)
+	}
+
 	if err != nil {
-		return sensu.CheckStateCritical, fmt.Errorf("error during websocket connection: %s", err.Error())
+		fmt.Println("error during websocket connection: " + err.Error())
+		fmt.Println("response: " + resp.Status)
+		fmt.Printf("error during websocket connection: %s", err.Error())
+		return sensu.CheckStateCritical, nil
 	}
 
 	println("sending payload: " + plugin.Payload + " to " + plugin.url)
