@@ -14,6 +14,8 @@ var upgrader = websocket.Upgrader{
 }
 
 func main() {
+	fmt.Println("Starting server on :8080")
+
 	http.HandleFunc("/echo", func(w http.ResponseWriter, r *http.Request) {
 		conn, _ := upgrader.Upgrade(w, r, nil) // error ignored for sake of simplicity
 
@@ -32,6 +34,10 @@ func main() {
 				return
 			}
 		}
+	})
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "This is a websocket echo server. take a look at /echo")
 	})
 
 	http.ListenAndServe(":8080", nil)

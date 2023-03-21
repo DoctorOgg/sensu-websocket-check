@@ -100,7 +100,7 @@ func executeCheck(event *types.Event) (int, error) {
 	}
 	c, _, err := websocket.DefaultDialer.Dial(plugin.url, http.Header{})
 	if err != nil {
-		return sensu.CheckStateCritical, fmt.Errorf("failed to establish WebSocket connection: %s", err)
+		return sensu.CheckStateCritical, fmt.Errorf("error during websocket connection: %s", err.Error())
 	}
 
 	println("sending payload: " + plugin.Payload + " to " + plugin.url)
