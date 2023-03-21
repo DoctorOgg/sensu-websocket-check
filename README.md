@@ -1,6 +1,4 @@
 [![Sensu Bonsai Asset](https://img.shields.io/badge/Bonsai-Download%20Me-brightgreen.svg?colorB=89C967&logo=sensu)](https://bonsai.sensu.io/assets/DoctorOgg/sensu-websocket-check)
-![Go Test](https://github.com/DoctorOgg/sensu-websocket-check/workflows/Go%20Test/badge.svg)
-![goreleaser](https://github.com/DoctorOgg/sensu-websocket-check/workflows/goreleaser/badge.svg)
 
 # sensu-websocket-check
 
@@ -100,6 +98,20 @@ there is a test server in test-server directory.  To run it, do the following:
 go run test-server/main.go
 ```
 
+Note this server also supports some command line options:
+
+```bash
+$ go run test-server/main.go -help
+
+Options:
+  -address string
+        address to listen on (default "0.0.0.0")
+  -help
+        show help
+  -port int
+        port to listen on (default 8080)
+```
+
 and then run the plugin with the following command:
 
 ```bash
@@ -110,6 +122,3 @@ unexpected response: pings%
 $ echo $?
 2
 ```
-
-[6]: https://docs.sensu.io/sensu-go/latest/reference/checks/
-[10]: https://docs.sensu.io/sensu-go/latest/reference/assets/

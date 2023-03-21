@@ -2,8 +2,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -13,8 +16,25 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+func showHelp() {
+	fmt.Println("Usage: " + os.Args[0] + " [options]")
+	fmt.Println("Options:")
+	flag.PrintDefaults()
+}
+
 func main() {
-	fmt.Println("Starting server on :8080")
+	listenPort := flag.Int("port", 8080, "port to listen on")
+	listenAddress := flag.String("address", "0.0.0.0", "address to listen on")
+	helpflag := flag.Bool("help", false, "show help")
+
+	flag.Parse()
+
+	if *helpflag {
+		showHelp()
+		os.Exit(0)
+	}
+
+	fmt.Println("Starting server on ", *listenAddress, ":", *listenPort)
 
 	http.HandleFunc("/echo", func(w http.ResponseWriter, r *http.Request) {
 		conn, _ := upgrader.Upgrade(w, r, nil) // error ignored for sake of simplicity
@@ -40,5 +60,5 @@ func main() {
 		fmt.Fprintf(w, "This is a websocket echo server. take a look at /echo")
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(*listenAddress+":"+strconv.Itoa(*listenPort), nil)
 }
