@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/gorilla/websocket"
 	"github.com/sensu-community/sensu-plugin-sdk/sensu"
@@ -98,7 +99,12 @@ func executeCheck(event *types.Event) (int, error) {
 	if plugin.IgnoreCert {
 		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	}
-	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, http.Header{})
+	headers := http.Header{}
+	urlObj, _ := url.Parse(plugin.url)
+	headers.Add("Host", urlObj.Host)
+	headers.Add("User-Agent", "Sensu Go WebSocket Check")
+
+	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, headers)
 
 	if err == websocket.ErrBadHandshake {
 		fmt.Printf("handshake failed with status %d", resp.StatusCode)
