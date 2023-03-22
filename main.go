@@ -110,6 +110,14 @@ func executeCheck(event *types.Event) (int, error) {
 		fmt.Printf("handshake failed with status %d", resp.StatusCode)
 	}
 
+	fmt.Println("response: " + resp.Status)
+	// Print out all the response headers
+	for key, values := range resp.Header {
+		for _, value := range values {
+			fmt.Printf("%s: %s\n", key, value)
+		}
+	}
+
 	if err != nil {
 		fmt.Println("error during websocket connection: " + err.Error())
 		fmt.Println("response: " + resp.Status)
