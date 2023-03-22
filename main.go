@@ -18,6 +18,7 @@ type Config struct {
 	StringToCheck string
 	IgnoreCert    bool
 	Payload       string
+	Debug         bool
 }
 
 var (
@@ -75,6 +76,15 @@ var (
 			Usage:     "Payload to send to the WebSocket server",
 			Value:     &plugin.Payload,
 		},
+		&sensu.PluginConfigOption{
+			Path:      "debug",
+			Env:       "DEBUG",
+			Argument:  "debug",
+			Shorthand: "d",
+			Default:   false,
+			Usage:     "Enable debug mode",
+			Value:     &plugin.Debug,
+		},
 	}
 )
 
@@ -106,27 +116,25 @@ func executeCheck(event *types.Event) (int, error) {
 
 	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, headers)
 
-	if err == websocket.ErrBadHandshake {
-		fmt.Printf("handshake failed with status %d", resp.StatusCode)
-	}
-
-	fmt.Println("response: " + resp.Status)
-	// Print out all the response headers
-	for key, values := range resp.Header {
-		for _, value := range values {
-			fmt.Printf("%s: %s\n", key, value)
+	if plugin.Debug {
+		fmt.Println("response: " + resp.Status)
+		// Print out all the response headers
+		for key, values := range resp.Header {
+			for _, value := range values {
+				fmt.Printf("%s: %s\n", key, value)
+			}
 		}
 	}
 
 	if err != nil {
 		fmt.Println("error during websocket connection: " + err.Error())
 		fmt.Println("response: " + resp.Status)
-		fmt.Printf("error during websocket connection: %s", err.Error())
 		return sensu.CheckStateCritical, nil
 	}
 
 	println("sending payload: " + plugin.Payload + " to " + plugin.url)
 	err = c.WriteMessage(websocket.TextMessage, []byte(plugin.Payload))
+
 	if err != nil {
 		fmt.Printf("failed to write to WebSocket: %s", err)
 		return sensu.CheckStateCritical, nil
