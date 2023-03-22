@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 
@@ -107,18 +108,25 @@ func executeCheck(event *types.Event) (int, error) {
 	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, headers)
 
 	if plugin.Debug {
-		fmt.Println("response: " + resp.Status)
-		// Print out all the response headers
+		fmt.Println("Response Status: " + resp.Status + "\n")
+		fmt.Println("Response Headers:\n")
 		for key, values := range resp.Header {
 			for _, value := range values {
 				fmt.Printf("%s: %s\n", key, value)
 			}
 		}
+		fmt.Println("--------------------")
+
+		// Print out the response body
+		fmt.Println("Response Body:")
+		body, _ := ioutil.ReadAll(resp.Body)
+		fmt.Printf("%s\n", body)
+		fmt.Println("--------------------")
+
 	}
 
 	if err != nil {
 		fmt.Println("error during websocket connection: " + err.Error())
-		fmt.Println("response: " + resp.Status)
 		return sensu.CheckStateCritical, nil
 	}
 
