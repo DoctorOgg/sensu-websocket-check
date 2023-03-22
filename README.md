@@ -37,12 +37,13 @@ Available Commands:
   version     Print the version number of this plugin
 
 Flags:
+  -d, --debug                    Enable debug mode
   -h, --help                     help for sensu-go-websocket-check
   -i, --ignore-cert              Ignore certificate errors
   -p, --payload string           Payload to send to the WebSocket server (default "ping")
   -s, --string-to-check string   String to check in the response (default "ping")
-  -t, --timeout int              Timeout in seconds (default 10)
   -u, --url string               URL of the WebSocket server to check (e.g., ws://example.com/socket))
+
 
 Use "sensu-go-websocket-check [command] --help" for more information about a command.
 ```
