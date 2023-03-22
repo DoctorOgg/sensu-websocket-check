@@ -104,6 +104,7 @@ func executeCheck(event *types.Event) (int, error) {
 	urlObj, _ := url.Parse(plugin.url)
 	headers.Add("Host", urlObj.Host)
 	headers.Add("User-Agent", "Sensu Go WebSocket Check")
+	headers.Add("Origin", urlObj.Scheme+"://"+urlObj.Host)
 
 	c, resp, err := websocket.DefaultDialer.Dial(plugin.url, headers)
 
