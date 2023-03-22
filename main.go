@@ -14,7 +14,6 @@ import (
 type Config struct {
 	sensu.PluginConfig
 	url           string
-	Timeout       int
 	StringToCheck string
 	IgnoreCert    bool
 	Payload       string
@@ -39,15 +38,6 @@ var (
 			Default:   "",
 			Usage:     "URL of the WebSocket server to check (e.g., ws://example.com/socket))",
 			Value:     &plugin.url,
-		},
-		&sensu.PluginConfigOption{
-			Path:      "Timeout",
-			Env:       "TIMEOUT",
-			Argument:  "timeout",
-			Shorthand: "t",
-			Default:   10,
-			Usage:     "Timeout in seconds",
-			Value:     &plugin.Timeout,
 		},
 		&sensu.PluginConfigOption{
 			Path:      "StringToCheck",
